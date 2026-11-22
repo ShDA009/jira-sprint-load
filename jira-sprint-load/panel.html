@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Загрузка спринта</title>
+  <link rel="stylesheet" href="panel.css">
+  <script type="module" src="panel.mjs"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div>
+      <p class="board" id="board-name"></p>
+      <h1>Загрузка спринта</h1>
+    </div>
+    <button id="settings" type="button" class="quiet">Настройки</button>
+  </header>
+  <main>
+    <div id="empty" class="card" hidden>
+      <h2>Подключите доску</h2>
+      <p>Откройте Jira в этом окне Chrome. Выберите Scrum-доску и добавьте участников команды в настройках.</p>
+      <button id="configure" type="button">Настроить доску</button>
+    </div>
+    <section id="dashboard" hidden aria-label="Загрузка команды">
+      <label for="sprint">Спринт</label>
+      <div class="toolbar">
+        <select id="sprint" aria-label="Спринт"></select>
+        <button id="refresh" class="quiet" type="button" title="Обновить данные">Обновить</button>
+      </div>
+      <p id="status" class="status" role="status"></p>
+      <div id="report" hidden>
+        <p id="notice" class="notice" hidden></p>
+        <h2 id="hours-heading"></h2>
+        <div id="members" class="stack"></div>
+        <section id="exceptions" aria-label="Задачи вне расчёта по участникам">
+          <h2>Проверить задачи</h2>
+          <div id="groups" class="stack"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="editor">
+    <form id="settings-form">
+      <header class="dialog-header">
+        <h2>Настройки доски</h2>
+        <button type="button" id="cancel" class="quiet">Закрыть</button>
+      </header>
+      <section class="form-section">
+        <h3>Подключение</h3>
+        <label for="jira-base">Базовый адрес Jira</label>
+        <div class="toolbar">
+          <input id="jira-base" type="url" required placeholder="https://jira.example.com">
+          <button type="button" id="connect" class="quiet">Проверить</button>
+        </div>
+        <p class="help">Откройте Jira с действующей сессией в этом окне. Включите контекстный путь, если он есть.</p>
+        <p id="connection" class="status" role="status"></p>
+        <label for="boards">Scrum-доска</label>
+        <select id="boards" required></select>
+        <button type="button" id="sample" class="quiet" disabled>Проверить поля и подзадачи</button>
+        <p id="sample-result" class="status" role="status"></p>
+      </section>
+      <section class="form-section">
+        <h3>Правила расчёта</h3>
+        <label for="subtasks">Где команда хранит оценки</label>
+        <select id="subtasks" required>
+          <option value="">Выберите правило подзадач</option>
+          <option value="parents">На родителях, подзадачи исключаются</option>
+          <option value="leaves">На подзадачах и задачах без подзадач</option>
+          <option value="all">На родителях и подзадачах, часы независимы</option>
+        </select>
+        <label for="remaining">Remaining Estimate</label>
+        <select id="remaining">
+          <option value="tracked">Команда поддерживает остаток</option>
+          <option value="untracked">Остаток системно не поддерживается</option>
+        </select>
+        <div class="pair">
+          <div><label for="factor">Коэффициент, %</label><input id="factor" type="number" min="0" max="100" step="any" required></div>
+          <div><label for="start">Начало рабочего дня</label><input id="start" type="time" required></div>
+        </div>
+        <label for="zone">Часовой пояс команды</label>
+        <input id="zone" required placeholder="Europe/Moscow">
+      </section>
+      <section class="form-section">
+        <h3>Команда</h3>
+        <div class="toolbar">
+          <button type="button" id="team-import" class="quiet">Импорт команды</button>
+          <button type="button" id="team-export" class="quiet">Экспорт команды</button>
+          <input type="file" id="team-file" accept=".json,application/json" hidden>
+        </div>
+        <p id="team-transfer-status" class="status" role="status"></p>
+        <div id="team-import-confirm" class="toolbar" hidden>
+          <button type="button" id="team-import-apply">Заменить команду</button>
+          <button type="button" id="team-import-cancel" class="quiet">Отмена</button>
+        </div>
+        <label for="user-query">Имя или логин в Jira</label>
+        <div class="toolbar">
+          <input id="user-query" type="search" placeholder="Найти участника">
+          <button type="button" id="find-user" class="quiet">Найти</button>
+        </div>
+        <div id="user-results" class="stack" aria-live="polite"></div>
+        <div id="team-edit" class="stack"></div>
+      </section>
+      <footer class="dialog-footer">
+        <p id="save-error" class="status error" role="alert" hidden></p>
+        <button id="save" type="submit">Сохранить настройки</button>
+      </footer>
+    </form>
+  </dialog>
+</body>
+</html>

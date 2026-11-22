@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Загрузка спринта Jira",
+  "version": "0.1.4",
+  "description": "Часы команды на Scrum-доске Jira",
+  "minimum_chrome_version": "116",
+  "permissions": ["sidePanel", "storage", "scripting"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "background": {"service_worker": "service-worker.js", "type": "module"},
+  "side_panel": {"default_path": "panel.html"},
+  "action": {"default_title": "Загрузка спринта Jira"},
+  "icons": {"128": "icon.png"}
+}
